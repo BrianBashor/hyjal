@@ -1,3 +1,4 @@
+import os
 import urllib.parse
 import urllib.request
 from PIL import Image
@@ -102,55 +103,40 @@ class Player:
         ### Player ID ###
         self.player_id = player_id
 
-    def download_image(self, url):
-        urllib.request.urlretrieve(url, 'img/' + self.player_name + '.jpg')
+    def get_bust(self):
+        urllib.request.urlretrieve(self.bust, '.img/' + self.player_name + '_bust.jpg')
 
-    def get_bust(self, url):
-        urllib.request.urlretrieve(url, 'img/' + self.player_name + '_bust.jpg')
+    def get_avatiar(self):
+        urllib.request.urlretrieve(self.avatar, '.img/' + self.player_name + '_avatiar.jpg')
 
-    def get_avatiar(self, url):
-        urllib.request.urlretrieve(url, 'img/' + self.player_name + '_avatiar.jpg')
+    def get_render(self):
+        urllib.request.urlretrieve(self.render, '.img/' + self.player_name + '_render.jpg')
 
-    def get_render(self, url):
-        urllib.request.urlretrieve(url, 'img/' + self.player_name + '_render.jpg')
-
-    def create_image(self, image):
-        print("Generating: " + str(self.player_name))
+    def create_image(self):
+        print("Generating image for: " + str(self.player_name))
         IMG_BOARDER = 10
-        TXT_BOARDER = 5
+        
+        self.get_bust()
 
-        img = Image.open(image)
-        w, h = img.size
-        background = Image.new('RGB', (w + 2 * IMG_BOARDER, h + 2 * IMG_BOARDER), self.class_color)
-        background.save('img/background.jpg')
+        with Image.open('.img/' + self.player_name + '_bust.jpg') as img1:
+            w, h = img1.size
+            background = Image.new('RGB', (w + 2 * IMG_BOARDER, h + 2 * IMG_BOARDER), self.class_color)
+            background.save('.img/background.jpg')
 
-        font = ImageFont.truetype("fount/arial.ttf", 26)
+            img1 = Image.open('.img/background.jpg')
+            img2 = Image.open('.img/' + self.player_name + '_bust.jpg')
+            img1.paste(img2, (IMG_BOARDER, IMG_BOARDER))
+            img1.save(".img/" + self.player_name + "_bust.jpg")
 
-        name = self.player_name
+        with Image.open('.img/' + self.player_name + '_bust.jpg') as img1:
+            w, h = img1.size
+            draw = ImageDraw.Draw(img1)
+            font = ImageFont.truetype(".fount/arial.ttf", 26)
+            W, H = draw.textsize(self.player_name, font=font)
 
-
-        im1 = Image.open('img/background.jpg')
-        im2 = Image.open(image)
-        im1.paste(im2, (IMG_BOARDER, IMG_BOARDER))
-        w, h = im1.size
-
-        outline = "#000000"
-
-        draw = ImageDraw.Draw(im1)
-        font = ImageFont.truetype("fount/arial.ttf", 26)
-
-        W, H = draw.textsize(name, font=font)
-
-        draw.text(((w - W) / 2, 100 ), name, font=font)
-        im1.save("img/" + name + ".jpg")
-
-
-# W, H = (300,200)
-# msg = "hello"
-
-# im = Image.new("RGBA",(W,H),"yellow")
-# draw = ImageDraw.Draw(im)
-# w, h = draw.textsize(msg)
-# draw.text(((W-w)/2,(H-h)/2), msg, fill="black")
-
-# im.save("hello.png", "PNG")
+            draw.text(((w - W) / 2 - 1, (h - H) - 1), self.player_name, font=font, fill="black")
+            draw.text(((w - W) / 2 - 1, (h - H) + 1), self.player_name, font=font, fill="black")
+            draw.text(((w - W) / 2 + 1, (h - H) + 1), self.player_name, font=font, fill="black")
+            draw.text(((w - W) / 2 + 1, (h - H) - 1), self.player_name, font=font, fill="black")
+            draw.text(((w - W) / 2, (h - H)), self.player_name, font=font, fill=self.class_color)
+            img1.save(".img/" + self.player_name + "_bust.jpg")

@@ -1,5 +1,9 @@
 /.cache
 /.devcontainer
 /__pycache__
-cred
-fount
+/.cred
+/.fount
+/.img
+/.vscode
+/.notes
+/.vscode
