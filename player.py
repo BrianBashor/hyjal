@@ -120,16 +120,6 @@ class Player:
 
         with Image.open('.img/' + self.player_name + '_bust.jpg') as img1:
             w, h = img1.size
-            background = Image.new('RGB', (w + 2 * IMG_BOARDER, h + 2 * IMG_BOARDER), self.class_color)
-            background.save('.img/background.jpg')
-
-            img1 = Image.open('.img/background.jpg')
-            img2 = Image.open('.img/' + self.player_name + '_bust.jpg')
-            img1.paste(img2, (IMG_BOARDER, IMG_BOARDER))
-            img1.save(".img/" + self.player_name + "_bust.jpg")
-
-        with Image.open('.img/' + self.player_name + '_bust.jpg') as img1:
-            w, h = img1.size
             draw = ImageDraw.Draw(img1)
             font = ImageFont.truetype(".fount/arial.ttf", 26)
             W, H = draw.textsize(self.player_name, font=font)
@@ -140,3 +130,15 @@ class Player:
             draw.text(((w - W) / 2 + 1, (h - H) - 1), self.player_name, font=font, fill="black")
             draw.text(((w - W) / 2, (h - H)), self.player_name, font=font, fill=self.class_color)
             img1.save(".img/" + self.player_name + "_bust.jpg")
+
+        with Image.open('.img/' + self.player_name + '_bust.jpg') as img1:
+            w, h = img1.size
+            background = Image.new('RGB', (w + 2 * IMG_BOARDER, h + 2 * IMG_BOARDER), self.class_color)
+            background.save('.img/background.jpg')
+
+            img1 = Image.open('.img/background.jpg')
+            img2 = Image.open('.img/' + self.player_name + '_bust.jpg')
+            img1.paste(img2, (IMG_BOARDER, IMG_BOARDER))
+            img1.save(".img/" + self.player_name + "_bust.jpg")
+
+
