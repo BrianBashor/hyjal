@@ -8,6 +8,7 @@ class Blizzard:
     api_count = 0
 
     def __init__(self):
+        """Create access token."""
         CLIENT = os.environ['CLIENT']
         SECRET = os.environ['SECRET']
         self.access_token = requests.get("https://us.battle.net/oauth/token?grant_type=client_credentials&client_id=" + CLIENT + "&client_secret=" + SECRET).json()["access_token"]
@@ -61,6 +62,31 @@ class Blizzard:
         else:
             return None
 
+    def game_playable_specialization(self, id):
+        self.api_count += 1
+        self.spec = requests.get("https://us.api.blizzard.com/data/wow/playable-specialization/" + str(id) + "?namespace=static-us&locale=en_US&access_token=" + self.access_token)
+        if self.spec.status_code == 200:
+            return json.loads(self.spec.text)
+        else:
+            return None
+
+    def game_playable_specialization_index(self):
+        self.api_count += 1
+        self.spec = requests.get("https://us.api.blizzard.com/data/wow/playable-specialization/index?namespace=static-us&locale=en_US&access_token=" + self.access_token)
+        if self.spec.status_code == 200:
+            return json.loads(self.spec.text)
+        else:
+            return None
+
+    def external_call(self, url):
+        self.api_count += 1
+        self.external = requests.get(url + "&access_token=" + self.access_token)
+        if self.external.status_code == 200:
+            return json.loads(self.external.text)
+        else:
+            print("something went wrong")
+            return None
+
     # Profile API Call #
     def profile_character_equipment(self, player, server):
         self.api_count += 1
@@ -99,5 +125,13 @@ class Blizzard:
         self.render = requests.get("https://us.api.blizzard.com/profile/wow/character/" + server + "/" + name + "/character-media?namespace=profile-us&locale=en_US&access_token=" + self.access_token)
         if self.render.status_code == 200:
             return json.loads(self.render.text)
+        else:
+            return None
+
+    def profile_specialization(self, url):
+        self.api_count += 1
+        self.spec = requests.get(url)
+        if self.spec.status_code == 200:
+            return json.loads(self.spec.text + "&access_token=" + self.access_token)
         else:
             return None
