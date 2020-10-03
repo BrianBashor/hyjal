@@ -1,18 +1,15 @@
-import os
 import re
 import json
 import time
-import urllib.request
 import urllib.parse
 
 from player import Player
 from blizzard import Blizzard
-from profession import Game_Profession
+
+blizzard = Blizzard()
 
 all_characters = []
 app_profession = {}
-
-blizzard = Blizzard()
 
 
 def gen_player():
@@ -30,6 +27,7 @@ def gen_player():
                     rl = True
             else:
                 if main:
+                    rl = False
                     main = False
                     name = urllib.parse.quote(line[0])
                     server = line[1]
@@ -49,9 +47,6 @@ def gen_player():
 
                     all_characters.append(Player(main, rl, player_info, gear_info, profession_info, pvp_2s, pvp_3s, image_url, key))
 
-                    if rl:
-                        rl = False
-
 
 def gen_profession():
     profession_tier = {}
@@ -62,19 +57,18 @@ def gen_profession():
             profession_tier[current_profession["name"]] = current_profession["skill_tiers"][0]["name"].split(' / ')[0]
     return profession_tier
 
-
-def compair_profession(profession_tier):
-    for p in profession_tier:
-        print(p)
-        tier = profession_tier[p].split(' / ')[0]
-        for c in all_characters:
-            print(c.profession_list)
-            if re.findall(c.profession_list[0][0], p):
-                if c.profession_list[0][3] == tier:
-                    print("FOUND_P1")
-            if re.findall(c.profession_list[0][0], p):
-                if c.profession_list[0][3] == tier:
-                    print("FOUND_P2")
+    def compair_profession(profession_tier):
+        for p in profession_tier:
+            print(p)
+            tier = profession_tier[p].split(' / ')[0]
+            for c in all_characters:
+                print(c.profession_list)
+                if re.findall(c.profession_list[0][0], p):
+                    if c.profession_list[0][3] == tier:
+                        print("FOUND_P1")
+                if re.findall(c.profession_list[0][0], p):
+                    if c.profession_list[0][3] == tier:
+                        print("FOUND_P2")
 
 # def mythic_plus():
 #     with open('character_list', 'r') as f:
@@ -94,6 +88,18 @@ def compair_profession(profession_tier):
 
 
 # mythic_plus()
+
+def gen_random_image():
+    """ Images for the side bar of the site """
+    with open('character_list', 'r') as f:
+        for i in f:
+            line = i.lower().strip().split(' ')
+            if line[0] != "#":
+                main = True
+                key = line[1]
+                if len(line) == 3:
+                    rl = True
+
 
 
 def gen_team_table_html():
