@@ -80,35 +80,34 @@ def history(current_period=True):
                                 for member in leader["members"]:
                                     if member["profile"]["name"].lower() == player.split(' ')[0].lower():
                                         current_run.append(key)
+                                        current_run.append(",")
                                         current_run.append(leader["keystone_level"])
+                                        current_run.append(",")
                                         current_run.append(leaderboard["map"]["name"])
+                                        current_run.append(",")
                                         current_run.append(leaderboard["period"])
+                                        current_run.append(",")
                                         current_run.append(leader["duration"])
+                                        current_run.append(",")
                                         current_run.append(leader["completed_timestamp"])
+                                        current_run.append(",")
 
                                         for m in leader["members"]:
-                                            current_run.append("PLAYER")
                                             current_run.append(m["profile"]["name"])
+                                            current_run.append(",")
                                             for s in specialization[m["specialization"]["id"]]:
                                                 current_run.append(s)
-
-                                        current_run.append("AFFIX")
+                                                current_run.append(",")
                                         for affix in leaderboard["keystone_affixes"]:
                                             current_run.append(affix["keystone_affix"]["name"])
-
-                                        file_mode = ''
-                                        if current_period:
-                                            file_mode = 'a'
-                                        else:
-                                            file_mode = 'w'
-                                        with open('m_pluse_data.txt', file_mode) as mpd:
+                                            current_run.append(",")
+                                        with open('m_pluse_data.txt', 'a') as mpd:
                                             for line in current_run:
                                                 mpd.write(str(line))
-                                                mpd.write(" ")
                                             mpd.write('\n')
             except Exception as e:
-                print("\nCould not parse " + str(dungeon_index[d] + " " + str(d) + " " + str(p)) + "\n")
+                print("\nCould not parse " + str(dungeon_index[d] + " " + str(d) + " " + str(p)))
                 break
 
 
-history()
+history(False)
