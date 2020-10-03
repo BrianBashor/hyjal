@@ -104,16 +104,7 @@ class Player:
         # Player ID #
         self.player_id = player_id
 
-    def get_bust(self):
-        urllib.request.urlretrieve(self.bust, 'img/' + self.player_name + '_bust.jpg')
-
-    def get_avatar(self):
-        urllib.request.urlretrieve(self.avatar, 'img/' + self.player_name + '_avatar.jpg')
-
-    def get_render(self):
-        urllib.request.urlretrieve(self.render, 'img/' + self.player_name + '_render.jpg')
-
-    def create_team_image(self):
+        # Team Picture #
         print("Generating image for: " + str(self.player_name))
         IMG_BOARDER = 10
 
@@ -122,12 +113,12 @@ class Player:
         with Image.open('img/' + self.player_name + '_bust.jpg') as img1:
             w, h = img1.size
             background = Image.new('RGB', (w + 2 * IMG_BOARDER, h + 2 * IMG_BOARDER), self.class_color)
-            background.save('img/background.jpg')
+            background.save('img/background.jpg', quality=100)
 
             img1 = Image.open('img/background.jpg')
             img2 = Image.open('img/' + self.player_name + '_bust.jpg')
             img1.paste(img2, (IMG_BOARDER, IMG_BOARDER))
-            img1.save("img/" + self.player_name + "_bust.jpg")
+            img1.save("img/" + self.player_name + "_bust.jpg", quality=100)
 
         with Image.open('img/' + self.player_name + '_bust.jpg') as img1:
             w, h = img1.size
@@ -140,4 +131,13 @@ class Player:
             draw.text(((w - W) / 2 + 1, (h - H) + 1), self.player_name, font=font, fill="black")
             draw.text(((w - W) / 2 + 1, (h - H) - 1), self.player_name, font=font, fill="black")
             draw.text(((w - W) / 2, (h - H + 1)), self.player_name, font=font, fill=self.class_color)
-            img1.save("img/" + self.player_name + "_bust.jpg")
+            img1.save("img/" + self.player_name + "_bust.jpg", quality=100)
+
+    def get_bust(self):
+        urllib.request.urlretrieve(self.bust, 'img/' + self.player_name + '_bust.jpg')
+
+    def get_avatar(self):
+        urllib.request.urlretrieve(self.avatar, 'img/' + self.player_name + '_avatar.jpg')
+
+    def get_render(self):
+        urllib.request.urlretrieve(self.render, 'img/' + self.player_name + '_render.jpg')
