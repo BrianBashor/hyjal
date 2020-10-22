@@ -1,12 +1,17 @@
 {
     "python.pythonPath": "/usr/local/bin/python3",
-    "python.linting.pylintEnabled": false,
-    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pycodestyleEnabled": false,
     "python.linting.enabled": true,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "python.linting.pycodestyleArgs": [
-        "--ignore=E501"
+        "--ignore=E501", // line length
     ],
-    "python.linting.pydocstyleEnabled": false
+    "python.linting.pydocstyleEnabled": false,
+    "editor.rulers": [80, 120],
+
+    "workbench.colorCustomizations": {
+    "editorRuler.foreground": "#e7463c"
+    }
 }
